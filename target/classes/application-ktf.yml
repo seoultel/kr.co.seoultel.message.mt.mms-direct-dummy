@@ -1,0 +1,23 @@
+server:
+  port: 15000
+
+spring:
+  application:
+    name: KTF-SERVER
+
+direct:
+  telecom: KTF # Write telecom to UpperCase
+  endpoint:
+    ip: 127.0.0.1
+    port: 14000
+
+  ktf:
+
+
+
+
+file:
+  paths:
+    message-history: /Users/sim/Documents/GitHub/seoultel/kr.co.seoultel.message.mt.mms-direct-server/src/main/resources/dvt/messageHistory.dvt
+    submit-ack: /Users/sim/Documents/GitHub/seoultel/kr.co.seoultel.message.mt.mms-direct-server/src/main/resources/dvt/submitAck.dvt
+    report: /Users/sim/Documents/GitHub/seoultel/kr.co.seoultel.message.mt.mms-direct-server/src/main/resources/dvt/report.dvt

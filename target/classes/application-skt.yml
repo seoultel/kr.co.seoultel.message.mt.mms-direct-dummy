@@ -1,0 +1,17 @@
+server:
+  port: 15000
+
+spring:
+  application:
+    name: KTF-SERVER
+
+direct:
+  telecom: SKT
+  ktf:
+
+
+file:
+  paths:
+    message-history: /Users/sim/Documents/GitHub/seoultel/kr.co.seoultel.message.mt.mms-direct-server/src/main/resources/dvt/messageHistory.dvt
+    submit-ack: /Users/sim/Documents/GitHub/seoultel/kr.co.seoultel.message.mt.mms-direct-server/src/main/resources/dvt/submitAck.dvt
+    report: /Users/sim/Documents/GitHub/seoultel/kr.co.seoultel.message.mt.mms-direct-server/src/main/resources/dvt/report.dvt

@@ -1,13 +1,37 @@
 server:
-  port: 15000
+  port: 12001
 
 spring:
   application:
-    name: KTF-SERVER
+    name: LGT-SERVER
 
 direct:
   telecom: LGT
-  ktf:
+  endpoint:
+    ip: 127.0.0.1
+    port: 12000
+
+  cpids:
+    - cpid: "1528801080"
+      tps: 20
+    - cpid: "1528801081"
+      tps: 20
+    - cpid: "1528801082"
+      tps: 20
+    - cpid: "1528801083"
+      tps: 20
+    - cpid: "1528801084"
+      tps: 20
+
+  storage:
+    tps:
+      file-path: /Users/simjeonghun/github/kr.co.seoultel.message.mt.mms-direct-dummy/src/main/resources/storage/lgt/persistence.storage
+
+    history:
+      file-path: /Users/simjeonghun/github/kr.co.seoultel.message.mt.mms-direct-dummy/src/main/resources/storage/lgt/history.storage
+
+    report:
+      file-path: /Users/simjeonghun/github/kr.co.seoultel.message.mt.mms-direct-dummy/src/main/resources/storage/lgt/report.storage
 
 
 file:

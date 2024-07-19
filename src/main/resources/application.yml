@@ -6,6 +6,17 @@ spring:
     name: KTF-SERVER
 
 direct:
+  cpids:
+    - cpid: "1528801080"
+      tps: 20
+    - cpid: "1528801081"
+      tps: 20
+    - cpid: "1528801082"
+      tps: 20
+    - cpid: "1528801083"
+      tps: 20
+    - cpid: "1528801084"
+      tps: 20
   ktf:
 
 

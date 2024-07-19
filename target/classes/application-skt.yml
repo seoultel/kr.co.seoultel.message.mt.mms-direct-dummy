@@ -1,5 +1,5 @@
 server:
-  port: 15000
+  port: 10001
 
 spring:
   application:
@@ -7,8 +7,31 @@ spring:
 
 direct:
   telecom: SKT
-  ktf:
+  cpids:
+    - cpid: "1528801080"
+      tps: 10
+    - cpid: "1528801081"
+      tps: 15
+    - cpid: "1528801082"
+      tps: 7
+    - cpid: "1528801083"
+      tps: 20
+    - cpid: "1528801084"
+      tps: 13
 
+  endpoint:
+    ip: 127.0.0.1
+    port: 10000
+
+  storage:
+    tps:
+      file-path: /Users/simjeonghun/github/kr.co.seoultel.message.mt.mms-direct-dummy/src/main/resources/storage/skt/persistence.storage
+
+    history:
+      file-path: /Users/simjeonghun/github/kr.co.seoultel.message.mt.mms-direct-dummy/src/main/resources/storage/skt/history.storage
+
+    report:
+      file-path: /Users/simjeonghun/github/kr.co.seoultel.message.mt.mms-direct-dummy/src/main/resources/storage/skt/report.storage
 
 file:
   paths:

@@ -1,103 +1,99 @@
-//package kr.co.seoultel.message.mt.mms.direct.modules.lgt;
-//
-//import io.netty.channel.Channel;
-//import kr.co.seoultel.message.mt.mms.core.entity.MessageHistory;
-//import kr.co.seoultel.message.mt.mms.core.messages.smtnt.delivery.SmtntDeliveryAckMessage;
-//import kr.co.seoultel.message.mt.mms.core.messages.smtnt.report.SmtntReportMessage;
-//import kr.co.seoultel.message.mt.mms.core.util.CommonUtil;
-//import kr.co.seoultel.message.mt.mms.core.util.DateUtil;
-//import kr.co.seoultel.message.mt.mms.direct.entity.SoapMessage;
-//import kr.co.seoultel.mms.server.core.modules.server.DefaultServer;
-//import kr.co.seoultel.mms.server.core.util.TestUtil;
-//import lombok.extern.slf4j.Slf4j;
-//import org.springframework.stereotype.Component;
-//
-//import javax.annotation.PreDestroy;
-//import java.util.List;
-//import java.util.Optional;
-//import java.util.Set;
-//import java.util.concurrent.ConcurrentLinkedQueue;
-//
-//import static kr.co.seoultel.message.mt.mms.core.messages.smtnt.SmtntProtocol.DELIVERY_RESULT_EXCEED_TPS;
-//import static kr.co.seoultel.message.mt.mms.core.messages.smtnt.SmtntProtocol.MMS_MSG_TYPE;
-//
-//@Slf4j
-//@Component
-//public class LgtReportProcessor extends kr.co.seoultel.mms.server.core.modules.SvrReportProcessor<SoapMessage> {
-//    private final Set<MessageHistory> messageHistories;
-//    protected LgtReportProcessor(DefaultServer server, ConcurrentLinkedQueue<SmtntDeliveryAckMessage> reportQueue, Set<MessageHistory> messageHistories) {
-//        super(server, reportQueue);
-//        this.messageHistories = messageHistories;
-//    }
-//
-//    @Override
-//    protected void sendReport(Channel channel, SoapMessage soapMessage) {
-//
-//    }
-//
-//    @Override
-//    protected void init() {
-//        Optional<List<SmtntDeliveryAckMessage>> optionalMessages = reportQueueDataVault.readAll(.class);
-//        optionalMessages.ifPresent(reportQueue::addAll);
-//    }
-//
-//    @Override
-//    public void run() {
-//        while (Application.isStarted()) {
-//            Channel rChannel = ((SmtntServer) server).getSmtntHandler().getRChannel();
-//            while ((rChannel != null && rChannel.isOpen()) && !reportQueue.isEmpty()) {
-//                SmtntDeliveryAckMessage message = (SmtntDeliveryAckMessage) reportQueue.remove();
-//
-//                CommonUtil.doThreadSleep(TestUtil.getRandomNumberInRange(1, 5));
-//                sendReport(rChannel, message);
-//            }
-//
-//            CommonUtil.doThreadSleep(250L);
-//        }
-//    }
-//
-//    @Override
-//    protected void sendReport(Channel channel, SmtntDeliveryAckMessage message) {
-//        int result = ReportResult.getReportResult();
-//
-//        String umsMsgId = message.getUserMsgId();
-//        String srcMsgId = message.getUserMsgSubId();
-//        String phoneNo = message.getPhoneNo();
-//        String userData = message.getUserData();
-//        String telecom = TestUtil.getRandomStr("SKT", "KTF", "LGT");
-//
-//        // result = DELIVERY_RESULT_EXCEED_TPS;
-//        if (result == DELIVERY_RESULT_EXCEED_TPS) messageHistories.removeIf(mh -> mh.getUmsMsgId().equals(umsMsgId));
-//
-//        SmtntReportMessage smtntReportMessage = SmtntReportMessage.builder()
-//                                                                    .userMsgId(umsMsgId)
-//                                                                    .userMsgSubId(srcMsgId)
-//                                                                    .serverMsgId(String.valueOf(TestUtil.getRandomNumberInRange(1000000000L, 20000000000000L)))
-//                                                                    .msgType(MMS_MSG_TYPE)
-//                                                                    .phoneNo(phoneNo)
-//                                                                    .result(result)
-//                                                                    .telecom(telecom)
-//                                                                    .deliveryTime(DateUtil.getDate(0))
-//                                                                    .userData(userData)
-//                                                                    .build();
-//
-//        try {
-//            channel.writeAndFlush(smtntReportMessage).addListener(future -> {
-//                if (future.isSuccess()) {
-//                    log.info("[REPORT] successfully sended report of message[umsMsgId : {}] to sender", umsMsgId);
-//                } else {
-//                    reportQueue.add(message);
-//                    log.info("[REPORT] failed to send report of message[umsMsgId : {}] to sender", umsMsgId);
-//                }
-//            });
-//        } catch (Exception e) {
-//            reportQueue.add(message);
-//        }
-//    }
-//
-//    @Override
-//    @PreDestroy
-//    protected void destroy() {
-//        reportQueueDataVault.destroy(reportQueue);
-//    }
-//}
+package kr.co.seoultel.message.mt.mms.direct.modules.lgt;
+
+import jakarta.xml.soap.SOAPException;
+import kr.co.seoultel.message.mt.mms.core.common.constant.Constants;
+import kr.co.seoultel.message.mt.mms.core.common.exceptions.message.soap.MCMPSoapRenderException;
+import kr.co.seoultel.message.mt.mms.core.dataVault.DataVault;
+import kr.co.seoultel.message.mt.mms.core.entity.MessageHistory;
+import kr.co.seoultel.message.mt.mms.core.messages.direct.ktf.KtfDeliveryReportReqMessage;
+import kr.co.seoultel.message.mt.mms.core.messages.direct.lgt.LgtDeliveryReportReqMessage;
+import kr.co.seoultel.message.mt.mms.core.messages.direct.skt.SktDeliveryReportReqMessage;
+import kr.co.seoultel.message.mt.mms.core.util.CommonUtil;
+import kr.co.seoultel.message.mt.mms.core_module.storage.HashMapStorage;
+import kr.co.seoultel.message.mt.mms.core_module.storage.QueueStorage;
+import kr.co.seoultel.message.mt.mms.direct.Application;
+import kr.co.seoultel.message.mt.mms.direct.config.LgtServerConfig;
+import kr.co.seoultel.mms.server.core.config.ServerDataVaultConfig;
+import kr.co.seoultel.mms.server.core.util.TestUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Conditional;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
+
+import javax.annotation.PreDestroy;
+import java.io.IOException;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+import static kr.co.seoultel.message.mt.mms.core.common.constant.Constants.EUC_KR;
+
+
+@Slf4j
+@Component
+@Conditional(LgtCondition.class)
+public class LgtReportProcessor extends Thread {
+
+    protected final RestTemplate restTemplate = new RestTemplateBuilder()
+            .defaultHeader(HttpHeaders.CONTENT_TYPE, "text/xml; charset=\"euc-kr\"")
+            .defaultHeader(HttpHeaders.ACCEPT_CHARSET, EUC_KR)
+            .defaultHeader("SOAPAction", Constants.SOAP_ACTION)
+            .build();
+
+    private final LgtServerConfig lgtServerConfig;
+
+
+    protected final HashMapStorage<String, MessageHistory> historyStorage;
+    protected final QueueStorage<LgtDeliveryReportReqMessage> reportQueueStorage;
+
+
+    protected LgtReportProcessor(LgtServerConfig lgtServerConfig, HashMapStorage<String, MessageHistory> historyStorage, QueueStorage<LgtDeliveryReportReqMessage> reportQueueStorage) {
+        this.lgtServerConfig = lgtServerConfig;
+
+        this.historyStorage = historyStorage;
+        this.reportQueueStorage = reportQueueStorage;
+    }
+
+
+
+    
+    protected void sendReport(LgtDeliveryReportReqMessage lgtDeliveryReportReqMessage) throws MCMPSoapRenderException {
+        String soapMessageToString = lgtDeliveryReportReqMessage.convertSOAPMessageToString();
+        String url = "http://" + lgtServerConfig.getIp() + ":" + String.valueOf(lgtServerConfig.getPort());
+
+        HttpEntity<String> httpEntity = new HttpEntity<>(soapMessageToString);
+
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
+        String body = response.getBody();
+        log.info("[REPORT-ACK] Successfully received ReportAck[{}] from LGT Sender", body);
+    }
+
+
+
+    @Override
+    public void run() {
+        while (Application.isStarted()) {
+            if (reportQueueStorage.isEmpty()) {
+                CommonUtil.doThreadSleep(250L);
+            } else {
+                LgtDeliveryReportReqMessage lgtDeliveryReportReqMessage = Objects.requireNonNull(reportQueueStorage.remove());
+                CommonUtil.doThreadSleep(TestUtil.getRandomNumberInRange(15, 50));
+
+                try {
+                    sendReport(lgtDeliveryReportReqMessage);
+                } catch (Exception e) {
+                    reportQueueStorage.add(lgtDeliveryReportReqMessage);
+                    log.error("[REPORT] Fail to send report[{}] to LGT Sender, do requeue", lgtDeliveryReportReqMessage, e);
+                }
+            }
+        }
+    }
+}

@@ -4,10 +4,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.ApplicationPidFileWriter;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@EnableScheduling
 @SpringBootApplication
 public class Application {
 
@@ -29,12 +31,6 @@ public class Application {
 
     public static boolean isStarted() {
         return !isStop;
-    }
-
-
-    @Bean
-    public Set<String> submitHistory() {
-        return new HashSet<String>();
     }
 
 }

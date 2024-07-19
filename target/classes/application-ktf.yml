@@ -1,5 +1,5 @@
 server:
-  port: 15000
+  port: 11001
 
 spring:
   application:
@@ -9,7 +9,30 @@ direct:
   telecom: KTF # Write telecom to UpperCase
   endpoint:
     ip: 127.0.0.1
-    port: 14000
+    port: 11000
+
+  cpids:
+    - cpid: "1528801080"
+      tps: 10
+    - cpid: "1528801081"
+      tps: 15
+    - cpid: "1528801082"
+      tps: 7
+    - cpid: "1528801083"
+      tps: 20
+    - cpid: "1528801084"
+      tps: 13
+
+  storage:
+    tps:
+      file-path: /Users/simjeonghun/github/kr.co.seoultel.message.mt.mms-direct-dummy/src/main/resources/storage/ktf/persistence.storage
+
+    history:
+      file-path: /Users/simjeonghun/github/kr.co.seoultel.message.mt.mms-direct-dummy/src/main/resources/storage/ktf/history.storage
+
+    report:
+      file-path: /Users/simjeonghun/github/kr.co.seoultel.message.mt.mms-direct-dummy/src/main/resources/storage/ktf/report.storage
+
 
   ktf:
 

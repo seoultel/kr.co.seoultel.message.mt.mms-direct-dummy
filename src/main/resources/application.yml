@@ -1,27 +1,2 @@
 server:
-  port: 15000
-
-spring:
-  application:
-    name: KTF-SERVER
-
-direct:
-  cpids:
-    - cpid: "1528801080"
-      tps: 20
-    - cpid: "1528801081"
-      tps: 20
-    - cpid: "1528801082"
-      tps: 20
-    - cpid: "1528801083"
-      tps: 20
-    - cpid: "1528801084"
-      tps: 20
-  ktf:
-
-
-file:
-  paths:
-    message-history: /Users/sim/Documents/GitHub/seoultel/kr.co.seoultel.message.mt.mms-direct-server/src/main/resources/dvt/messageHistory.dvt
-    submit-ack: /Users/sim/Documents/GitHub/seoultel/kr.co.seoultel.message.mt.mms-direct-server/src/main/resources/dvt/submitAck.dvt
-    report: /Users/sim/Documents/GitHub/seoultel/kr.co.seoultel.message.mt.mms-direct-server/src/main/resources/dvt/report.dvt
+  port: 11000

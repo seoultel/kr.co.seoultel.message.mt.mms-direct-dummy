@@ -1,40 +1,34 @@
 server:
   port: 10001
 
+
 spring:
   application:
-    name: KTF-SERVER
+    name: SKT-SERVER
 
 direct:
   telecom: SKT
+
   cpids:
     - cpid: "1528801080"
-      tps: 10
+      max-tps: 10
+      report-url: http://localhost:10000
     - cpid: "1528801081"
-      tps: 15
+      max-tps: 15
+      report-url: http://localhost:10000
     - cpid: "1528801082"
-      tps: 7
+      max-tps: 7
+      report-url: http://localhost:10000
     - cpid: "1528801083"
-      tps: 20
+      max-tps: 20
+      report-url: http://localhost:10000
     - cpid: "1528801084"
-      tps: 13
+      max-tps: 13
+      report-url: http://localhost:10000
 
-  endpoint:
-    ip: 127.0.0.1
-    port: 10000
+storage:
+  history:
+    file-path: /Users/bak.libra26/MCMP/kr.co.seoultel.message.mt.mms-direct-dummy/src/main/resources/storage/skt/history.storage
 
-  storage:
-    tps:
-      file-path: /Users/simjeonghun/github/kr.co.seoultel.message.mt.mms-direct-dummy/src/main/resources/storage/skt/persistence.storage
-
-    history:
-      file-path: /Users/simjeonghun/github/kr.co.seoultel.message.mt.mms-direct-dummy/src/main/resources/storage/skt/history.storage
-
-    report:
-      file-path: /Users/simjeonghun/github/kr.co.seoultel.message.mt.mms-direct-dummy/src/main/resources/storage/skt/report.storage
-
-file:
-  paths:
-    message-history: /Users/sim/Documents/GitHub/seoultel/kr.co.seoultel.message.mt.mms-direct-server/src/main/resources/dvt/messageHistory.dvt
-    submit-ack: /Users/sim/Documents/GitHub/seoultel/kr.co.seoultel.message.mt.mms-direct-server/src/main/resources/dvt/submitAck.dvt
-    report: /Users/sim/Documents/GitHub/seoultel/kr.co.seoultel.message.mt.mms-direct-server/src/main/resources/dvt/report.dvt
+  report:
+    file-path: /Users/bak.libra26/MCMP/kr.co.seoultel.message.mt.mms-direct-dummy/src/main/resources/storage/skt/report.storage

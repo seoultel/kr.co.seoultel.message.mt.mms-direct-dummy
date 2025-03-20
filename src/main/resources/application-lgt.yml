@@ -1,41 +1,40 @@
 server:
   port: 12001
+  tomcat:
+    threads:
+      min-spare: 1
+
 
 spring:
+
   application:
     name: LGT-SERVER
 
+
 direct:
   telecom: LGT
-  endpoint:
-    ip: 127.0.0.1
-    port: 12000
 
   cpids:
     - cpid: "1528801080"
-      tps: 20
+      max-tps: 10
+      report-url: http://localhost:12000
     - cpid: "1528801081"
-      tps: 20
+      max-tps: 15
+      report-url: http://localhost:12000
     - cpid: "1528801082"
-      tps: 20
+      max-tps: 7
+      report-url: http://localhost:12000
     - cpid: "1528801083"
-      tps: 20
+      max-tps: 10
+      report-url: http://localhost:12000
     - cpid: "1528801084"
-      tps: 20
-
-  storage:
-    tps:
-      file-path: /Users/simjeonghun/github/kr.co.seoultel.message.mt.mms-direct-dummy/src/main/resources/storage/lgt/persistence.storage
-
-    history:
-      file-path: /Users/simjeonghun/github/kr.co.seoultel.message.mt.mms-direct-dummy/src/main/resources/storage/lgt/history.storage
-
-    report:
-      file-path: /Users/simjeonghun/github/kr.co.seoultel.message.mt.mms-direct-dummy/src/main/resources/storage/lgt/report.storage
+      max-tps: 13
+      report-url: http://localhost:12000
 
 
-file:
-  paths:
-    message-history: /Users/sim/Documents/GitHub/seoultel/kr.co.seoultel.message.mt.mms-direct-server/src/main/resources/dvt/messageHistory.dvt
-    submit-ack: /Users/sim/Documents/GitHub/seoultel/kr.co.seoultel.message.mt.mms-direct-server/src/main/resources/dvt/submitAck.dvt
-    report: /Users/sim/Documents/GitHub/seoultel/kr.co.seoultel.message.mt.mms-direct-server/src/main/resources/dvt/report.dvt
+storage:
+  history:
+    file-path: /Users/bak.libra26/MCMP/kr.co.seoultel.message.mt.mms-direct-dummy/src/main/resources/storage/lgt/history.storage
+
+  report:
+    file-path: /Users/bak.libra26/MCMP/kr.co.seoultel.message.mt.mms-direct-dummy/src/main/resources/storage/lgt/report.storage

@@ -9,36 +9,63 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>kr.co.seoultel</groupId>
-    <artifactId>kr.co.seoultel.msm.direct.server</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>kr.co.seoultel.mms.direct.server</artifactId>
+    <version>1.0.0</version>
     <name>kr.co.seoultel.message.mt.mms-direct-server</name>
     <description>kr.co.seoultel.message.mt.mms-direct-server</description>
 
     <properties>
         <java.version>11</java.version>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>mcmp-snapshot</id>
+            <name>snapshot</name>
+            <url>https://nexus.std-ums.com/repository/mcmp-snapshot/</url>
+        </repository>
+        <repository>
+            <id>mcmp-releases</id>
+            <name>release</name>
+            <url>https://nexus.std-ums.com/repository/mcmp-releases/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
+        <!--Gson-->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>kr.co.seoultel.message</groupId>
+            <artifactId>message-core</artifactId>
+            <version>1.0.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-simple</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
-
-        <dependency>
-            <groupId>kr.co.seoultel.message</groupId>
-            <artifactId>mms-server-core</artifactId>
-            <version>1.2.0</version>
-        </dependency>
-
-
-
-        <!--  SOAP  -->
 
         <!-- https://mvnrepository.com/artifact/com.sun.mail/jakarta.mail -->
         <dependency>
@@ -74,16 +101,6 @@
             </exclusions>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <build>
@@ -94,5 +111,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
